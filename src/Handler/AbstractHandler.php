@@ -21,4 +21,8 @@ abstract class AbstractHandler
         }
     }
 
+    public static function supports(string $mime): bool
+    {
+        return static::isEnabled() && in_array($mime, static::mimes());
+    }
 }

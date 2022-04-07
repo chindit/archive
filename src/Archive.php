@@ -17,6 +17,18 @@ final class Archive
         ZipTarHandler::class,
     ];
 
+    public static function isSupportedArchive(string $sourceFile): bool
+    {
+        $archive = new self();
+        try {
+            $archive->findSupportedExtractor($sourceFile);
+
+            return true;
+        } catch (\Throwable $t) {
+            return false;
+        }
+    }
+
     public static function extract(string $sourceFile, string $targetDirectory): array
     {
         $archive = new self();
@@ -26,7 +38,7 @@ final class Archive
         $extractor->extract($targetDirectory);
     }
 
-    private function findSupportedExtractor(string $sourceFile): ArchiveHandlerInterface
+    public function findSupportedExtractor(string $sourceFile): ArchiveHandlerInterface
     {
         $mime = (new File($sourceFile, false))->getMimeType();
 

@@ -1,4 +1,6 @@
 {
+    "name": "chindit/archive",
+    "description": "A simple handler to extract any type of archive",
     "type": "library",
     "version": "0.0.1",
     "license": "AGPL-3.0-or-later",

@@ -13,6 +13,8 @@
         <testsuite name="main">
             <directory>test</directory>
             <exclude>vendor</exclude>
+            <!-- This test is excluded because GitHub can't either access unrar binary or install php-rar extensions-->
+            <exclude>test/Handler/RarHandlerTest.php</exclude>
         </testsuite>
     </testsuites>
 </phpunit>

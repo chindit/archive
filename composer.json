@@ -2,7 +2,7 @@
     "name": "chindit/archive",
     "description": "A simple handler to extract any type of archive",
     "type": "library",
-    "version": "0.0.1",
+    "version": "0.1.0",
     "license": "AGPL-3.0-or-later",
     "minimum-stability": "stable",
     "prefer-stable": true,

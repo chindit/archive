@@ -2,6 +2,7 @@
 
 namespace Chindit\Archive\Handler;
 
+
 class ZipTarHandler extends AbstractHandler implements ArchiveHandlerInterface
 {
 
@@ -21,6 +22,7 @@ class ZipTarHandler extends AbstractHandler implements ArchiveHandlerInterface
             'application/x-tar',
             'application/x-bzip2',
             'application/x-gzip',
+            'application/gzip',
             'application/x-gtar',
             'application/zip',
         ];
@@ -33,6 +35,8 @@ class ZipTarHandler extends AbstractHandler implements ArchiveHandlerInterface
 
     public function extract(string $outputDirectory): bool
     {
+        parent::extract($outputDirectory);
+
         $archive = new \PharData($this->file);
 
         return $archive->extractTo($outputDirectory, overwrite: true);

@@ -29,13 +29,13 @@ final class Archive
         }
     }
 
-    public static function extract(string $sourceFile, string $targetDirectory): array
+    public static function extract(string $sourceFile, string $targetDirectory): bool
     {
         $archive = new self();
         $extractorClass = $archive->findSupportedExtractor($sourceFile);
         $extractor = new $extractorClass($sourceFile);
 
-        $extractor->extract($targetDirectory);
+        return $extractor->extract($targetDirectory);
     }
 
     public function findSupportedExtractor(string $sourceFile): ArchiveHandlerInterface

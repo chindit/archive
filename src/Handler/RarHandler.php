@@ -2,6 +2,9 @@
 
 namespace Chindit\Archive\Handler;
 
+use Chindit\Archive\Exception\UnsupportedMethodException;
+use Symfony\Component\Process\Process;
+
 class RarHandler extends AbstractHandler implements ArchiveHandlerInterface
 {
 
@@ -22,7 +25,14 @@ class RarHandler extends AbstractHandler implements ArchiveHandlerInterface
 
     public static function isEnabled(): bool
     {
-        return class_exists(\RarArchive::class);
+        if(!class_exists(\RarArchive::class)) {
+            $process = Process::fromShellCommandline('unrar --version');
+            $process->run();
+
+            return $process->isSuccessful();
+        }
+
+        return true;
     }
 
     /**
@@ -31,6 +41,13 @@ class RarHandler extends AbstractHandler implements ArchiveHandlerInterface
      */
     public function getContent(): array
     {
+        if (!class_exists(\RarArchive::class)) {
+            $process = Process::fromShellCommandline('unrar l ' . $this->file);
+            $process->run();
+
+            return [$process->getOutput()];
+        }
+
         $rar = RarArchive::open($this->file);
         if ($rar === false) {
             return [];
@@ -61,23 +78,31 @@ class RarHandler extends AbstractHandler implements ArchiveHandlerInterface
     {
         parent::extract($outputDirectory);
 
-        $rar = RarArchive::open($this->file);
-        if ($rar === false) {
-            return false;
+        if (class_exists(\RarArchive::class)) {
+            $rar = RarArchive::open($this->file);
+            if ($rar === false) {
+                return false;
+            }
+
+            $entries = $rar->getEntries();
+
+            if ($entries === false) {
+                return false;
+            }
+
+            foreach ($entries as $entry) {
+                $entry->extract($outputDirectory);
+            }
+
+            $rar->close();
+
+            return true;
+        } else {
+            $process = Process::fromShellCommandline('unrar x ' . $this->file . ' ' . $outputDirectory);
+            $process->run();
+
+            return $process->isSuccessful();
         }
-
-        $entries = $rar->getEntries();
-
-        if ($entries === false) {
-            return false;
-        }
-
-        foreach ($entries as $entry) {
-            $entry->extract($outputDirectory);
-        }
-
-        $rar->close();
-
-        return true;
     }
+
 }

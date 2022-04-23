@@ -26,7 +26,7 @@ class RarHandler extends AbstractHandler implements ArchiveHandlerInterface
     public static function isEnabled(): bool
     {
         if(!class_exists(\RarArchive::class)) {
-            $process = Process::fromShellCommandline('unrar --version');
+            $process = Process::fromShellCommandline('/usr/bin/unrar--version');
             $process->run();
 var_dump($process->getOutput());
 var_dump($process->getErrorOutput());
@@ -43,7 +43,7 @@ var_dump($process->getErrorOutput());
     public function getContent(): array
     {
         if (!class_exists(\RarArchive::class)) {
-            $process = Process::fromShellCommandline('unrar l ' . $this->file);
+            $process = Process::fromShellCommandline('/usr/bin/unrarl ' . $this->file);
             $process->run();
 
             return [$process->getOutput()];
@@ -99,7 +99,7 @@ var_dump($process->getErrorOutput());
 
             return true;
         } else {
-            $process = Process::fromShellCommandline('unrar x ' . $this->file . ' ' . $outputDirectory);
+            $process = Process::fromShellCommandline('/usr/bin/unrarx ' . $this->file . ' ' . $outputDirectory);
             $process->run();
 
             return $process->isSuccessful();

@@ -38,7 +38,7 @@ final class Archive
         return $extractor->extract($targetDirectory);
     }
 
-    public function findSupportedExtractor(string $sourceFile): ArchiveHandlerInterface
+    public function findSupportedExtractor(string $sourceFile): string
     {
         $mime = (new File($sourceFile, false))->getMimeType();
 

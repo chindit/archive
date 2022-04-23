@@ -52,14 +52,17 @@ class ZipTarHandlerTest extends TestCase
         $handler->extract(sys_get_temp_dir());
     }
 
-    public function testWrongExtractionPath(): void
+    /**
+     * Due to directory encapsulation and root access, we cannot access an unreadable directory in GitHub o_O
+     */
+    /*public function testWrongExtractionPath(): void
     {
         $this->expectExceptionObject(new UnwritableOutputDirectory());
 
         $handler = new ZipTarHandler(__DIR__ . '/../testFiles/test.zip');
 
         $handler->extract(__DIR__ . '/../../');
-    }
+    }*/
 
     public function testZipFileExtraction(): void
     {

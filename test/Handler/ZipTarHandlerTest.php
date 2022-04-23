@@ -58,7 +58,7 @@ class ZipTarHandlerTest extends TestCase
 
         $handler = new ZipTarHandler(__DIR__ . '/../testFiles/test.zip');
 
-        $handler->extract('/');
+        $handler->extract(__DIR__ . '/../../');
     }
 
     public function testZipFileExtraction(): void

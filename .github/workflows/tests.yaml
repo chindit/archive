@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Install unrar
-        run: sudo apt install unrar
+        run: sudo apt install -y unrar
       - uses: actions/checkout@v2
       - name: Install dependencies
         run: composer install --prefer-dist --no-progress

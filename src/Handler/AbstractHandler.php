@@ -10,14 +10,20 @@ use Symfony\Component\Mime\MimeTypes;
 
 abstract class AbstractHandler
 {
-    public function __construct(protected $file)
+    /**
+     * @return string[]
+     */
+    public static abstract function mimes(): array;
+    public static abstract function isEnabled(): bool;
+
+    public function __construct(protected string $file)
     {
         if (!is_readable($this->file)) {
             throw new UnreadableArchiveException(sprintf("File %s cannot be read", $this->file));
         }
     }
 
-    public function extract(string $outputDirectory)
+    public function extract(string $outputDirectory): bool
     {
         if ((!is_dir($outputDirectory) && !$this->attemptDirectoryCreation($outputDirectory)) || !is_writable($outputDirectory)) {
             throw new UnwritableOutputDirectory();
@@ -27,6 +33,8 @@ abstract class AbstractHandler
         if (!in_array($fileMime, static::mimes(), true)) {
             throw new UnsupportedArchiveType(sprintf("File of type %s is not supported by the %s handler", $fileMime, static::class));
         }
+
+        return true;
     }
 
     public static function supports(string $mime): bool

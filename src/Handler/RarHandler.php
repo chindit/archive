@@ -2,12 +2,13 @@
 
 namespace Chindit\Archive\Handler;
 
-use Chindit\Archive\Exception\UnsupportedMethodException;
 use Symfony\Component\Process\Process;
 
 class RarHandler extends AbstractHandler implements ArchiveHandlerInterface
 {
-
+    /**
+     * @return string[]
+     */
     public static function extensions(): array
     {
         return [
@@ -15,6 +16,9 @@ class RarHandler extends AbstractHandler implements ArchiveHandlerInterface
         ];
     }
 
+    /**
+     * @return string[]
+     */
     public static function mimes(): array
     {
         return [
@@ -48,7 +52,7 @@ class RarHandler extends AbstractHandler implements ArchiveHandlerInterface
             return [$process->getOutput()];
         }
 
-        $rar = RarArchive::open($this->file);
+        $rar = \RarArchive::open($this->file);
         if ($rar === false) {
             return [];
         }
@@ -79,7 +83,7 @@ class RarHandler extends AbstractHandler implements ArchiveHandlerInterface
         parent::extract($outputDirectory);
 
         if (class_exists(\RarArchive::class)) {
-            $rar = RarArchive::open($this->file);
+            $rar = \RarArchive::open($this->file);
             if ($rar === false) {
                 return false;
             }

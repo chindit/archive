@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Chindit\Archive;
 
 use Chindit\Archive\Exception\UnsupportedArchiveType;
+use Chindit\Archive\Handler\AbstractHandler;
 use Chindit\Archive\Handler\ArchiveHandlerInterface;
 use Chindit\Archive\Handler\RarHandler;
 use Chindit\Archive\Handler\ZipTarHandler;
@@ -32,18 +33,20 @@ final class Archive
     public static function extract(string $sourceFile, string $targetDirectory): bool
     {
         $archive = new self();
-        $extractorClass = $archive->findSupportedExtractor($sourceFile);
-        $extractor = new $extractorClass($sourceFile);
+        $extractor = $archive->findSupportedExtractor($sourceFile);
 
         return $extractor->extract($targetDirectory);
     }
 
-    public function findSupportedExtractor(string $sourceFile): string
+    public function findSupportedExtractor(string $sourceFile): AbstractHandler
     {
         $mime = (new File($sourceFile, false))->getMimeType();
 
         foreach ($this->handlers as $handler) {
             if ($handler::supports($mime)) {
+                /** @var AbstractHandler */
+                $handler = new $handler($sourceFile);
+
                 return $handler;
             }
         }

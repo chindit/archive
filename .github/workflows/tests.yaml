@@ -18,3 +18,7 @@ jobs:
         run: composer install --prefer-dist --no-progress
       - name: PHPUnit
         uses: chindit/actions-phpunit@master
+      - name: PHPStan
+        uses: chindit/actions-phpstan@master
+        with:
+          arguments: 'src/ --level=9'

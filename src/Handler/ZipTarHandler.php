@@ -6,6 +6,9 @@ namespace Chindit\Archive\Handler;
 class ZipTarHandler extends AbstractHandler implements ArchiveHandlerInterface
 {
 
+    /**
+     * @return string[]
+     */
     public static function extensions(): array
     {
         return [
@@ -16,6 +19,9 @@ class ZipTarHandler extends AbstractHandler implements ArchiveHandlerInterface
         ];
     }
 
+    /**
+     * @return string[]
+     */
     public static function mimes(): array
     {
         return [
